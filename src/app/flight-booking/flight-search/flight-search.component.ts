@@ -8,7 +8,7 @@ import { FlightService, DefaultFlightService, DummyFlightService } from './fligh
   templateUrl: './flight-search.component.html',
   styleUrls: ['./flight-search.component.css'],
   providers: [
-    { provide: FlightService, useClass: DefaultFlightService }
+    // { provide: FlightService, useClass: DefaultFlightService }
   ]
 })
 export class FlightSearchComponent implements OnInit {
@@ -20,7 +20,12 @@ export class FlightSearchComponent implements OnInit {
     "5": true
   }
 
-  flights: Array<Flight> = [];
+  // flights: Array<Flight> = [];
+
+  get flights() {
+    return this.flightService.flights;
+  }
+
   selectedFlight: Flight;
 
   constructor(private flightService: FlightService) { }
@@ -35,10 +40,8 @@ export class FlightSearchComponent implements OnInit {
 
   search(): void {
 
-    this.flightService.find(this.from, this.to).subscribe(
-      flights => { this.flights = flights; },
-      err => {console.debug('error loading', err); }
-    )
+    this.flightService.load(this.from, this.to);
+    
 
     // this.flights = [
     //   { id: 17, from: 'München', to: 'Flagranti', date: '2018-11-09T17:00+01:00'},

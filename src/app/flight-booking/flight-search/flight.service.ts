@@ -8,6 +8,15 @@ export class DefaultFlightService implements FlightService {
   
   constructor(private http: HttpClient) { }
 
+  flights: Flight[] = [];
+
+  load(from: string, to: string): void {
+    this.find(from, to).subscribe(
+      flights => { this.flights = flights; },
+      err => { console.error('error loading', err); }
+    );
+  }
+
   find(from: string, to: string): Observable<Flight[]>
   {
     const url = 'http://www.angular.at/api/flight';
@@ -22,6 +31,12 @@ export class DefaultFlightService implements FlightService {
 @Injectable()
 export class DummyFlightService implements FlightService {
 
+  flights: Flight[] = [];
+
+  load(from: string, to: string): void {
+
+  }
+
   find(from: string, to: string): Observable<Flight[]> {
     return of([
       { id: 17, from: 'München', to: 'Flagranti', date: '2018-11-09T17:00+01:00'},
@@ -33,7 +48,7 @@ export class DummyFlightService implements FlightService {
 }
 
 
-const DEBUG = true;
+const DEBUG = false;
 
 @Injectable({
   providedIn: 'root',
@@ -49,5 +64,7 @@ const DEBUG = true;
   deps: [HttpClient]
 })
 export abstract class FlightService {
+  abstract flights: Flight[] = [];
+  abstract load(from: string, to: string): void;
   abstract find(from: string, to: string): Observable<Flight[]>;
 }
