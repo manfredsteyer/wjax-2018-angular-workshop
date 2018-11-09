@@ -15,6 +15,10 @@ export class FlightSearchComponent implements OnInit {
 
   from: string;
   to: string;
+  basket: object = {
+    "3": true,
+    "5": true
+  }
 
   flights: Array<Flight> = [];
   selectedFlight: Flight;
